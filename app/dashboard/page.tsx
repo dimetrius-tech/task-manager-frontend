@@ -1,13 +1,10 @@
 "use client";
 
 import DashboardStats from "@/components/dashboard/DashboardStats";
-import { useAuth } from "../context/AuthContext";
 import { useEffect, useState } from "react";
 import { statsAPI } from "@/lib/statsAPI";
 
 export default function Dashboard() {
-
-    const { user, loading, logout } = useAuth();
     const [totalTasks, setTotalTasks] = useState(0);
     const [tasksDueToday, setTasksDueToday] = useState(0);
     const [overdueTasks, setOverdueTasks] = useState(0);
@@ -22,7 +19,6 @@ export default function Dashboard() {
     useEffect(() => {
         fetchStats();
     }, []);
-    if(loading) return <p>Loading...</p>
 
     return (
         <div className="p-6">
