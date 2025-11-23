@@ -4,6 +4,7 @@ import {createContext, useContext, useEffect, useState} from 'react';
 import api from "@/lib/api";
 import Cookies from 'js-cookie';
 import { attachTokenInterceptor } from '@/lib/api';
+import { toast } from 'sonner';
 
 interface User {
     _id: string;
@@ -33,8 +34,9 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
     const [loading, setLoading] = useState(true);
     
     const refreshUser = async() => {
-        const token = Cookies.get("token");
-        attachTokenInterceptor(token);
+        const token: string | undefined = Cookies.get("token");
+        if (token) attachTokenInterceptor(token);
+        else toast.error('Authorization token not found');
         try {
             const { data } = await api.get('/auth/me', {requiresAuth: true});
             setUser(data);

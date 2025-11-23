@@ -12,6 +12,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '@radix-ui/react-popover
 import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
+import { userAPI } from '@/lib/userAPI';
+import { UserList } from '@/types/user';
 
 export interface TaskModalProps {
     open: boolean;
@@ -31,6 +33,16 @@ export const TaskModal: FC<TaskModalProps> = ({
     const [priority, setPriority] = useState<"low" | "medium" | "high">("medium");
     const [status, setStatus] = useState<"pending" | "in-progress" | "completed">("pending");
     const [dueDate, setDueDate] = useState<Date>(new Date());
+    const [assignee, setAssignee] = useState("");
+    const [userList, setUserList] = useState <UserList[]>([]);
+    const loadUsers = async () => {
+        try {
+            const getUserList = await userAPI.list();
+            setUserList(getUserList.data);
+        } catch(err: any) {
+            toast.error(err.message);
+        }
+    }
 
     useEffect(() => {
         if(isEdit && initialValues) {
@@ -38,11 +50,13 @@ export const TaskModal: FC<TaskModalProps> = ({
             setPriority(initialValues.priority);
             setStatus(initialValues.status);
             setDueDate(initialValues.dueDate);
+            setAssignee(initialValues.assignee);
         } else {
             setTitle("");
             setPriority("medium");
             setStatus("pending");
         }
+        loadUsers();
     }, [initialValues, isEdit, open]);
 
     const handleSubmit = async () => {
@@ -51,6 +65,7 @@ export const TaskModal: FC<TaskModalProps> = ({
             priority,
             status,
             dueDate,
+            assignee
         };
 
         try {
@@ -61,7 +76,7 @@ export const TaskModal: FC<TaskModalProps> = ({
             }
             onSuccess();
             onOpenChange(false);
-        } catch(err) {
+        } catch(err: any) {
             toast.warning(err);
         }
     }
@@ -104,6 +119,17 @@ export const TaskModal: FC<TaskModalProps> = ({
                             <SelectItem value="pending">Pending</SelectItem>
                             <SelectItem value="in-progress">In progress</SelectItem>
                             <SelectItem value="completed">Completed</SelectItem>
+                        </SelectContent>
+                    </Select>
+
+                    <Select value={status} onValueChange={(v: any) => setAssignee(v)}>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Select assignee" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {userList.map(u => (
+                                <SelectItem key={u._id} value={u._id}>{u.name}</SelectItem>
+                            ))}
                         </SelectContent>
                     </Select>
 

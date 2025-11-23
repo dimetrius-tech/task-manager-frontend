@@ -6,12 +6,15 @@ export interface Task {
     title: string;
     priority: TaskPriority;
     status: TaskStatus;
+    assignee: string;
+    author: string;
     dueDate: Date;
 }
 
 export interface TaskPayload {
-    title: string;
-    priority: TaskPriority;
+    title?: string;
+    priority?: TaskPriority;
     status: TaskStatus;
-    dueDate: Date;
+    dueDate?: Date;
+    assignee?: string;
 }
