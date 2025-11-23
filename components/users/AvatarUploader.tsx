@@ -21,7 +21,7 @@ export const AvatarUploader: React.FC = () => {
         try {
             await userAPI.uploadAvatar(file);
             await refreshUser();
-        } catch(err) {
+        } catch(err:any) {
             toast(err);
         } finally {
             setLoading(false);
@@ -32,7 +32,7 @@ export const AvatarUploader: React.FC = () => {
         <div className="flex items-center flex-col gap-4">
             <div>
                 <Avatar className='w-24 h-24'>
-                    <AvatarImage src={user.avatarUrl} className="w-24 h-24 object-cover rounded-full" alt="@shadcn" />
+                    <AvatarImage src={user?.avatarUrl} className="w-24 h-24 object-cover rounded-full" alt="@shadcn" />
                     <AvatarFallback className="w-24 h-24">
                         {user?.name?.charAt(0) || "U"}
                     </AvatarFallback>
