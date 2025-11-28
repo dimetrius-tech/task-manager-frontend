@@ -2,7 +2,7 @@
 
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { KanbanColumn } from "./KanbanColumn";
-import { Task, TaskStatus } from "@/types/task";
+import { Task } from "@/types/task";
 
 export function KanbanBoard ({
     tasks,

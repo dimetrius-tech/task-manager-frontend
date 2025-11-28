@@ -5,6 +5,7 @@ import api from "@/lib/api";
 import Cookies from 'js-cookie';
 import { attachTokenInterceptor } from '@/lib/api';
 import { toast } from 'sonner';
+import Loading from '@/components/ui/Loading';
 
 interface User {
     _id: string;
@@ -62,7 +63,7 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
     return (
         <AuthContext.Provider value={{ user, loading, logout, refreshUser }}>
             {loading 
-            ? "<p>Loading...</p>"
+            ? <Loading message={'Fetching data...'} />
             : children
         }
         </AuthContext.Provider>
