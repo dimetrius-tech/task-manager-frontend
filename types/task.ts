@@ -18,3 +18,9 @@ export interface TaskPayload {
     dueDate?: Date;
     assignee?: string;
 }
+
+export interface TaskFilters {
+    status: TaskStatus[];
+    priority: TaskPriority[];
+    myTasksOnly?: boolean;
+}
